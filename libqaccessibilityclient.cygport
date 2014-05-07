@@ -1,0 +1,29 @@
+inherit kde4
+
+NAME="libqaccessibilityclient"
+VERSION=0.1.1
+RELEASE=1
+CATEGORY="Libs"
+SUMMARY="Qt accessibility client library"
+DESCRIPTION="This library is used when writing accessibility clients such as
+screen readers."
+HOMEPAGE="https://projects.kde.org/projects/playground/accessibility/libkdeaccessibilityclient"
+SRC_URI="mirror://kde/stable/libqaccessibilityclient/libqaccessibilityclient-${VERSION}.tar.bz2"
+PATCH_URI="http://pkgs.fedoraproject.org/cgit/qaccessibilityclient.git/plain/qaccessibilityclient-0.1.0-dso.patch"
+
+# force Qt4 build
+PATCH_URI+=" http://pkgs.fedoraproject.org/cgit/qaccessibilityclient.git/plain/libqaccessibilityclient-0.1.1-QT4_BUILD.patch"
+CYGCMAKE_ARGS="-DQT4_BUILD=ON"
+
+PKG_NAMES="${NAME}0 ${NAME}-devel"
+libqaccessibilityclient0_CONTENTS="usr/bin/cygqaccessibilityclient-0.dll usr/share/doc/"
+libqaccessibilityclient_devel_CONTENTS="usr/include/qaccessibilityclient/
+	usr/lib/cmake/QAccessibilityClient/
+	usr/lib/libqaccessibilityclient.dll.a"
+
+src_install() {
+	cd ${B}
+	cyginstall
+
+	rm -f ${D}/usr/bin/accessibleapps.exe
+}
